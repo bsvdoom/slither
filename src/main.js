@@ -4,8 +4,10 @@
  * main
  *
  */
+var l = console.log.bind(console)
 
-import Stats from 'stats.js';
+
+import Stats from './stats.js';
 import Snake from './elements/Snake';
 import Food from './elements/Food';
 import frame from './frame';
@@ -26,6 +28,7 @@ canvas.height = window.innerHeight;
 
 // fps状态
 const stats = new Stats();
+
 document.body.appendChild(stats.dom);
 
 // 初始化地图对象
