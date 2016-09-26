@@ -46,6 +46,7 @@ frame.init({
   height: canvas.height
 });
 
+
 // 创建蛇类对象
 const snake = new Snake({
   x: frame.x + frame.width / 2,
@@ -53,6 +54,8 @@ const snake = new Snake({
   size: 40,
   length: 10
 });
+
+socket.emit('born', frame)
 
 // 食物生成方法
 const foodsNum = 1000;
@@ -176,6 +179,15 @@ function animate() {
   }
 
   stats.end();
+
+
+  // console.log(snake.bodys)
+  // console.log(snake)
+  socket.emit('report', snake);
+
+
+
+
 
   raf(animate);
 }

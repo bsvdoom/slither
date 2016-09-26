@@ -1,13 +1,15 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const config = require('./webpack.base');
-const http = require('http');
+// const http = require('http');
 const fs = require('fs');
 const os = require('os');
 const ip = getIp();
 const port = 9999;
 const devport = port - 1;
 const domain = `http://${ip}:${devport}`;
+
+var l = console.log.bind(console)
 
 const server = new WebpackDevServer(webpack({
   devtool: 'eval',
@@ -35,20 +37,52 @@ const server = new WebpackDevServer(webpack({
     poll: 1000
   }
 });
+server.listen(devport);
 
-http.createServer((req, res) => {
-  res.writeHead(200, {
-    'content-type': 'text/html;charset=utf-8'
-  });
+var express = require('express')
+var app = express();
+var http = require('http').Server(app)
 
-  res.end(
-    fs.readFileSync('./index.html')
+var io = require('socket.io')(http)
+io.on('connection', function(socket){
+    // socket.on('report', function(data){
+    //   l(data)
+    // })
+    socket.on('born', function(data){
+     socket.broadcast.emit('born', data);
+    })
+
+})
+
+
+
+app.get('/', function(req, res){
+    var html = fs.readFileSync('./index.html')
       .toString()
       .replace(/\.\/dist\//g, `${domain}/static/`)
-  );
-}).listen(port);
 
-server.listen(devport);
+    res.send(html)
+})
+
+// http.listen(port)
+
+http.listen(port, function(){
+
+});
+
+
+// http.createServer((req, res) => {
+//   res.writeHead(200, {
+//     'content-type': 'text/html;charset=utf-8'
+//   });
+
+//   res.end(
+//     fs.readFileSync('./index.html')
+//       .toString()
+//       .replace(/\.\/dist\//g, `${domain}/static/`)
+//   );
+// }).listen(port);
+
 
 function getIp() {
   'use strict';
