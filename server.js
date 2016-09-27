@@ -4,7 +4,8 @@ const config = require('./webpack.base');
 // const http = require('http');
 const fs = require('fs');
 const os = require('os');
-const ip = getIp();
+// const ip = getIp();
+const ip = '192.168.17.10';
 const port = 9999;
 const devport = port - 1;
 const domain = `http://${ip}:${devport}`;
@@ -43,16 +44,23 @@ var express = require('express')
 var app = express();
 var http = require('http').Server(app)
 
+var snakes = []
+
 var io = require('socket.io')(http)
 io.on('connection', function(socket){
     // socket.on('report', function(data){
     //   l(data)
     // })
-    socket.on('born', function(data){
-     socket.broadcast.emit('born', data);
+    socket.on('born', function(snake){
+      l(snake)
+      snakes.push(snake)
     })
 
 })
+
+setInterval(function(){
+    io.emit('communicate', {snakes : snakes})
+}, 1000)
 
 
 

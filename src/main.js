@@ -55,7 +55,7 @@ const snake = new Snake({
   length: 10
 });
 
-socket.emit('born', frame)
+socket.emit('born', snake)
 
 // 食物生成方法
 const foodsNum = 1000;
@@ -74,7 +74,7 @@ function createFood(num) {
 }
 
 // 生成机器蛇
-const robotsNum = 0;
+const robotsNum = 300;
 const robots = [];
 function createRobots(num) {
   for (let i = 0; i < num; i++) {
@@ -90,6 +90,8 @@ function createRobots(num) {
     }))
   }
 }
+
+// l(robots);
 
 /**
  * 碰撞检测
@@ -109,6 +111,12 @@ function collision(dom, dom2, isRect) {
   return Math.hypot(disX, disY) < (dom.width + dom2.width) / 2;
 }
 
+var data = {};
+socket.on('communicate', function(_data){
+  data = _data
+});
+
+
 // 创建一些食物
 createFood(foodsNum);
 
@@ -119,9 +127,12 @@ createRobots(robotsNum);
 const timeout = 0;
 let time = new Date();
 function animate() {
+  // l(data)
   const ntime = new Date();
 
   stats.begin();
+
+
 
   if (ntime - time > timeout) {
     map.clear();
@@ -165,9 +176,25 @@ function animate() {
         robot.nextTime = Math.random() * 5000;
         robot.header.directTo(Math.random() * Math.PI * 2);
       }
-
+      // l(robot)
       robot.render();
     }
+
+    // l(data.snakes)
+    // if (data.snakes instanceof Array) {
+    //   data.snakes.forEach(function(options) {
+    //       // count++
+    //       // if(count == 1){
+    //         // l(snake)
+    //         let snake = new Snake(options)
+    //         // l(snake)
+    //         snake.render()
+    //         // l(snake)
+    //         // l(typeof snake.render)
+    //       // }
+    //   })
+    // }
+    // l(data.snakes)
 
     snake.render();
 
