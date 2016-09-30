@@ -55,7 +55,33 @@ const snake = new Snake({
   length: 10
 });
 
+// snake.header.render()
+// l(Snake instanceof Object)
+// for (let i in Snake.__prop__) {
+//   l(i)
+// }
+// l(Snake)
+
 socket.emit('born', snake)
+
+// l(snake)
+// l(snake.__proto__)
+
+socket.on('born', function(_snake){
+  // l(snake.render)
+  // _snake = Object.assign(_snake, snake)
+  // _snake.__proto__ = snake.__proto__
+  // _snake.render()
+  l(_snake)
+  let snake = new Snake({
+    x : _snake.header.x,
+    y : _snake.header.y,
+    size : 40,
+    length : 10,
+    bodys : _snake.bodys,
+    header : _snake.header, 
+  })
+})
 
 // 食物生成方法
 const foodsNum = 1000;
@@ -74,7 +100,7 @@ function createFood(num) {
 }
 
 // 生成机器蛇
-const robotsNum = 300;
+const robotsNum = 0;
 const robots = [];
 function createRobots(num) {
   for (let i = 0; i < num; i++) {
@@ -210,7 +236,7 @@ function animate() {
 
   // console.log(snake.bodys)
   // console.log(snake)
-  socket.emit('report', snake);
+  // socket.emit('report', snake);
 
 
 
@@ -219,4 +245,4 @@ function animate() {
   raf(animate);
 }
 
-animate();
+// animate();

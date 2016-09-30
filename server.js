@@ -52,15 +52,16 @@ io.on('connection', function(socket){
     //   l(data)
     // })
     socket.on('born', function(snake){
-      l(snake)
-      snakes.push(snake)
+      // l(snake)
+      // snakes.push(snake)
+      io.emit('born', snake)
     })
 
 })
 
-setInterval(function(){
-    io.emit('communicate', {snakes : snakes})
-}, 1000)
+// setInterval(function(){
+//     io.emit('communicate', {snakes : snakes})
+// }, 1000)
 
 
 

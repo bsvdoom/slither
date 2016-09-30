@@ -87,13 +87,16 @@ const snakeImgStore = {
 // 蛇类
 export default class Snake {
   constructor(options) {
+    // console.log(options)
+
     const imgWidth = 60;
     const imgHeight = 60;
     const fillColor = options.fillColor || '#fff';
     const strokeColor = options.strokeColor || '#000';
 
-    this.bodys = [];
+    this.bodys = [];  
     this.point = 0;
+
 
     // 是否为机器人
     this.robot = options.robot;
@@ -121,10 +124,19 @@ export default class Snake {
    * @param options
    */
   init(options) {
+    // console.log(options)
     // 创建脑袋
-    this.header = new SnakeHeader(Object.assign(options, {
+    let header = new SnakeHeader(Object.assign(options, {
       img: this.headerImage
     }));
+
+    if(options.header){
+      options.header.__proto__ = header.__proto__
+      this.header = options.header
+    }else{
+      this.header = header
+    }
+    console.log(this.header)
 
     // 创建身躯, 给予各个身躯跟踪目标
     for (let i = 0; i < options.length; i++) {
